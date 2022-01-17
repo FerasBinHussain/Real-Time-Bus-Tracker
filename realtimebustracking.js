@@ -1,12 +1,12 @@
-// Bus markers list
+// Bus markers list.
 let busMarkers = [];
-// Bus popups list
+// Bus popups list.
 let busPopups = [];
 
-// Mapbox token
+// Mapbox token.
 mapboxgl.accessToken = 'pk.eyJ1IjoiZmVyYXNiaW5odXNzYWluIiwiYSI6ImNreTZ6a2l6YzEwdTUyb3B2a3dvaXJlb2MifQ.Qn43SmOoRMx3As49TmyUgA';
 
-// This is the map instance
+// This is the map instance.
 let map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v11',
@@ -16,7 +16,7 @@ let map = new mapboxgl.Map({
 
 
 async function Start(){
-    // get bus data    
+    // Get bus data.    
 	const locations = await getBusLocations();
     let busLocations = [];
     locations.forEach(element => {
@@ -34,18 +34,23 @@ async function Start(){
     }else {
         CreateBusMarker(busLocations);
     }
-   
+
 	// timer
 	setTimeout(Start, 15000);
 }
 
 function CreateBusMarker(busLocations){
+    // Create new markers list to be added to DOM.
     let newMarkers = new Array (busLocations.length);
     // create the popup
     let newPopup = new Array(newMarkers.length);
+
     // Add markers to the map.
     for (let index = 0; index < newMarkers.length; index++) {
+        
+        // Get current element.
         const element = busLocations[index];
+
         // Create a DOM element for each marker.
         const el = document.createElement('div');
         el.className = 'marker';
@@ -60,10 +65,10 @@ function CreateBusMarker(busLocations){
         .addTo(map)
         .togglePopup();
 
+        // Keep old Bus markers and popups. 
         busMarkers.push(element);
         busPopups.push(newPopup[index]);
-        }
-    console.log("CE " + newMarkers.length)
+    }
 }
 
 function UpdateBusMarker(busLocations){
@@ -73,6 +78,7 @@ function UpdateBusMarker(busLocations){
         elem.parentNode.removeChild(elem);
         busPopups[index].remove();
     }
+
     // Free markers and popups lists to start over. 
     busMarkers = [];
     busPopups = [];
@@ -80,7 +86,8 @@ function UpdateBusMarker(busLocations){
     // Create the updated Bus Markers.
     CreateBusMarker(busLocations)
 }
-// Request bus data from MBTA
+
+// Request bus data from MBTA.
 async function getBusLocations(){
 	const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
 	const response = await fetch(url);
@@ -88,4 +95,5 @@ async function getBusLocations(){
 	return json.data;
 }
 
+// Start app 
 Start();
