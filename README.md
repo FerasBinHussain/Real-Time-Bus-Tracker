@@ -14,7 +14,7 @@ npm install http-server
 
 ```bash
 # after cloning the repo navigate to project directory
-cd PATH/Eye-Movement
+cd PATH/Real-Time-Bus-Tracker
 
 # load http-server 
 http-server  # on Windows (http-server.cmd)
